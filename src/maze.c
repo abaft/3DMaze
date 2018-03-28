@@ -137,3 +137,31 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
   maze->posx = itt->x;
   maze->posy = itt->y;
 }
+
+char maze_progress(Maze* maze, int direction)
+{
+  // 0 = North
+  // 1 = East
+  // 2 = South
+  // 3 = West
+  
+  switch (direction)
+  {
+    case 0:
+      if (!cell_by_pos(maze, maze->posx, maze->posy)->wall_north)
+        maze->posy -= 1;
+      break;
+    case 1:
+      if (!cell_by_pos(maze, maze->posx, maze->posy)->wall_east)
+        maze->posx += 1;
+      break;
+    case 2:
+      if (!cell_by_pos(maze, maze->posx, maze->posy)->wall_south)
+        maze->posy += 1;
+      break;
+    case 3:
+      if (!cell_by_pos(maze, maze->posx, maze->posy)->wall_west)
+        maze->posx -= 1;
+      break;
+  }
+}

@@ -50,5 +50,6 @@ typedef struct
 
 void maze_free(Maze* maze);
 void maze_generate(Maze* maze, unsigned int width, unsigned int height);
+char maze_progress(Maze* maze, int direction);
 
 #endif
