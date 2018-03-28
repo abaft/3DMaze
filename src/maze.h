@@ -1,7 +1,7 @@
 #ifndef MAZE_H_
 #define MAZE_H_
 
-struct _Cell
+typedef struct _Cell
 {
   unsigned int x;
   unsigned int y;
@@ -18,7 +18,15 @@ struct _Cell
   char wall_west : 1;
 
   struct _Cell* _build_previous;
-};
+}Cell;
+
+typedef struct
+{
+  char north : 1;
+  char east : 1;
+  char south : 1;
+  char west : 1;
+}maze_wallframe;
 
 /*
      y
@@ -39,5 +47,8 @@ typedef struct
   unsigned int posx;
   unsigned int posy;
 }Maze;
+
+void maze_free(Maze* maze);
+void maze_generate(Maze* maze, unsigned int width, unsigned int height);
 
 #endif

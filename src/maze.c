@@ -1,5 +1,7 @@
 #include "maze.h"
 #include <stdlib.h>
+#include <stdio.h>
+
 
 void maze_free(Maze* maze)
 {
@@ -41,19 +43,19 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
       itt->wall_south = 1;
       itt->wall_west = 1;
     }
-  --itt;
+  itt = maze->_data;
 
   // Build the maze using depth first reccursive backtracking
 
   itt->_build_previous = itt;
+  _Bool escape = 1;
   do
   {
     if (
-        itt->_push_north == 1 ||
-        itt->_push_east  == 1 ||
-        itt->_push_south == 1 ||
-        itt->_push_west  == 1
-        )
+        itt->_push_north||
+        itt->_push_east ||
+        itt->_push_south||
+        itt->_push_west)
     {
       int dir = rand()%4;
       struct _Cell* previous = itt;
@@ -64,7 +66,7 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
             continue;
           itt->_push_north = 0;
           itt = cell_by_pos(maze, itt->x, itt->y - 1);
-          if (itt->_build_previous == NULL)
+          if (itt->_build_previous != NULL)
           {
             itt = previous;
             continue;
@@ -80,7 +82,7 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
             continue;
           itt->_push_east = 0;
           itt = cell_by_pos(maze, itt->x + 1, itt->y);
-          if (itt->_build_previous == NULL)
+          if (itt->_build_previous != NULL)
           {
             itt = previous;
             continue;
@@ -96,7 +98,7 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
             continue;
           itt->_push_south = 0;
           itt = cell_by_pos(maze, itt->x, itt->y + 1);
-          if (itt->_build_previous == NULL)
+          if (itt->_build_previous != NULL)
           {
             itt = previous;
             continue;
@@ -112,7 +114,7 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
             continue;
           itt->_push_west = 0;
           itt = cell_by_pos(maze, itt->x - 1, itt->y);
-          if (itt->_build_previous == NULL)
+          if (itt->_build_previous != NULL)
           {
             itt = previous;
             continue;
@@ -123,12 +125,14 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
           itt->_build_previous = previous;
           break;
       }
+
+      escape = 0;
     }
     else
     {
       itt = itt->_build_previous;
     }
-  }while (itt->_build_previous != itt);
+  }while (itt->_build_previous != itt || escape);
 
   maze->posx = itt->x;
   maze->posy = itt->y;
