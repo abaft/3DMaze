@@ -1,6 +1,7 @@
 #include "maze.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 
 void maze_free(Maze* maze)
@@ -21,6 +22,7 @@ void maze_generate(Maze* maze, unsigned int width, unsigned int height)
   maze->height = height;
   maze->posx = 0;
   maze->posy = 0;
+  srand(time(NULL));
 
   maze->_data = malloc(sizeof(struct _Cell) * width * height);
   struct _Cell* itt = maze->_data;

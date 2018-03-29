@@ -1,9 +1,10 @@
 #include "maze.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
-#define HEIGHT 20
-#define WIDTH 20
-#define SCALE 10
+#define HEIGHT 50
+#define WIDTH 50
+#define SCALE 7
 
 int main ()
 {
@@ -19,8 +20,15 @@ int main ()
       SDL_bool done = SDL_FALSE;
       SDL_Rect player =
       {
-        1,
-        1,
+        0,
+        0,
+        5,
+        5
+      };
+      SDL_Rect goal =
+      {
+        1 + rand()%WIDTH * 4,
+        1 + rand()%HEIGHT * 4,
         3,
         3
       };
@@ -33,6 +41,8 @@ int main ()
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderFillRect(renderer, &player);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
         for (int i = 0; i < HEIGHT; ++i)
@@ -52,8 +62,9 @@ int main ()
 
          }
 
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderFillRect(renderer, &player);
+        
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderFillRect(renderer, &goal);
         
 
         SDL_RenderPresent(renderer);
@@ -83,8 +94,8 @@ int main ()
           }
         }
         
-        player.x = 1 + 4 * maze.posx;
-        player.y = 1 + 4 * maze.posy;
+        player.x = 4 * maze.posx;
+        player.y = 4 * maze.posy;
 
       }
     }
