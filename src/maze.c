@@ -165,5 +165,8 @@ char maze_progress(Maze* maze, int direction)
       if (!cell_by_pos(maze, maze->posx, maze->posy)->wall_west)
         maze->posx -= 1;
       break;
+    default:
+      return 0;
   }
+  return 1;
 }
