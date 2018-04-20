@@ -2,7 +2,7 @@
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
 #include "maze.h"
-#define M_SIZE 10
+#define M_SIZE 100
 
 #define true 1
 #define false 0
@@ -57,10 +57,10 @@ bool initGL()
   glClearColor( 0.f, 0.f, 0.f, 1.f );
   glClearDepth(1.0f);
 
-  GLfloat aspect = 1920 / 1080;
+  GLfloat aspect = 1 ;
 
   // Set the viewport to cover the new window
-  glViewport(0, 0, 1920, 1080);
+  glViewport(0, 0, 1080, 1080);
 
   // Set the aspect ratio of the clipping volume to match the viewport
   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
@@ -91,7 +91,7 @@ bool init(SDL_Window** window)
         "Cubes",                  
         SDL_WINDOWPOS_UNDEFINED,           
         SDL_WINDOWPOS_UNDEFINED,           
-        1920,                               
+        1080,                               
         1080,                               
         SDL_WINDOW_OPENGL
     );
@@ -153,7 +153,7 @@ void render(SDL_Window* w, Maze maze)
    
    glLoadIdentity();
    
-   gluLookAt(	pos[1], 0.0f, pos[0],
+   gluLookAt(	pos[1], 20.0f, pos[0],
 			pos[1] + (pos[2] == 1 ? 1 : 0) + (pos[2] == 3 ? -1 : 0), 
       0.0, 
       pos[0] + (pos[2] == 0 ? -1 : 0) + (pos[2] == 2 ? 1 : 0),
@@ -182,6 +182,7 @@ void render(SDL_Window* w, Maze maze)
         glColor3f(   0.0f, 2.0f,   0.0f );  // Green
         glVertex3f(  2.0f, 2.0f,   2.0f );  // Top-right of top face
         glVertex3f( -2.0f, 2.0f,   2.0f );  // Top-left of top face
+        glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
         glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
         glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
       } 
@@ -190,10 +191,11 @@ void render(SDL_Window* w, Maze maze)
         glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
         glVertex3f(  2.0f,  2.0f,  2.0f);  // Top-Right of left face
         glVertex3f(  2.0f,  2.0f, -2.0f);  // Top-Left of left face
+        glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
         glVertex3f(  2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
         glVertex3f(  2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
       }
-      if (maze._data[j + i * M_SIZE].wall_west)
+      /*if (maze._data[j + i * M_SIZE].wall_west)
       {
         // Left face
         glColor3f(   0.0f,  0.0f,  2.0f);  // Blue
@@ -205,11 +207,11 @@ void render(SDL_Window* w, Maze maze)
       if (maze._data[j + i * M_SIZE].wall_south)
       {
         glColor3f(   0.0f, 2.0f,   0.0f );  // Green
-        glVertex3f(  2.0f, 2.0f,   2.0f );  // Top-right of top face
-        glVertex3f( -2.0f, 2.0f,   2.0f );  // Top-left of top face
-        glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
-        glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
-      }
+        glVertex3f(  2.0f, 2.0f,   -2.0f );  // Top-right of top face
+        glVertex3f( -2.0f, 2.0f,   -2.0f );  // Top-left of top face
+        glVertex3f( -2.0f, -2.0f,  -2.0f );  // Bottom-left of top face
+        glVertex3f(  2.0f, -2.0f,  -2.0f );  // Bottom-right of top face
+      }*/
       glEnd();
       glPopMatrix();
     }
