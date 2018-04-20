@@ -15,33 +15,30 @@ int pos[3];
 void mazeSeg()
 {
   glBegin( GL_QUADS );
+    glColor3f(   1.0f,  0.0f,  0.0f);  // Violet
     // Top face
-    glColor3f(   0.0f, 2.0f,  0.0f );  // Green
-    glVertex3f(  2.0f, 2.0f, -2.0f );  // Top-right of top face
-    glVertex3f( -2.0f, 2.0f, -2.0f );  // Top-left of top face
-    glVertex3f( -2.0f, 2.0f,  2.0f );  // Bottom-left of top face
-    glVertex3f(  2.0f, 2.0f,  2.0f );  // Bottom-right of top face
+    glVertex3f(  1.0f, 1.0f, -1.0f );  // Top-right of top face
+    glVertex3f( -1.0f, 1.0f, -1.0f );  // Top-left of top face
+    glVertex3f( -1.0f, 1.0f,  1.0f );  // Bottom-left of top face
+    glVertex3f(  1.0f, 1.0f,  1.0f );  // Bottom-right of top face
 
     // Bottom face
-    glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
-    glVertex3f(  2.0f, -2.0f, -2.0f ); // Top-right of bottom face
-    glVertex3f( -2.0f, -2.0f, -2.0f ); // Top-left of bottom face
-    glVertex3f( -2.0f, -2.0f,  2.0f ); // Bottom-left of bottom face
-    glVertex3f(  2.0f, -2.0f,  2.0f ); // Bottom-right of bottom face
+    glVertex3f(  1.0f, -1.0f, -1.0f ); // Top-right of bottom face
+    glVertex3f( -1.0f, -1.0f, -1.0f ); // Top-left of bottom face
+    glVertex3f( -1.0f, -1.0f,  1.0f ); // Bottom-left of bottom face
+    glVertex3f(  1.0f, -1.0f,  1.0f ); // Bottom-right of bottom face
 
    // Left face
-    glColor3f(   0.0f,  0.0f,  2.0f);  // Blue
-    glVertex3f( -2.0f,  2.0f,  2.0f);  // Top-Right of left face
-    glVertex3f( -2.0f,  2.0f, -2.0f);  // Top-Left of left face
-    glVertex3f( -2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
-    glVertex3f( -2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
+    glVertex3f( -1.0f,  1.0f,  1.0f);  // Top-Right of left face
+    glVertex3f( -1.0f,  1.0f, -1.0f);  // Top-Left of left face
+    glVertex3f( -1.0f, -1.0f, -1.0f);  // Bottom-Left of left face
+    glVertex3f( -1.0f, -1.0f,  1.0f);  // Bottom-Right of left face
 
     // Right face
-    glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
-    glVertex3f(  2.0f,  2.0f,  2.0f);  // Top-Right of left face
-    glVertex3f(  2.0f,  2.0f, -2.0f);  // Top-Left of left face
-    glVertex3f(  2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
-    glVertex3f(  2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
+    glVertex3f(  1.0f,  1.0f,  1.0f);  // Top-Right of left face
+    glVertex3f(  1.0f,  1.0f, -1.0f);  // Top-Left of left face
+    glVertex3f(  1.0f, -1.0f, -1.0f);  // Bottom-Left of left face
+    glVertex3f(  1.0f, -1.0f,  1.0f);  // Bottom-Right of left face
 glEnd();
 }
 
@@ -51,6 +48,8 @@ bool initGL()
   glDepthFunc(GL_LEQUAL);
   glShadeModel(GL_SMOOTH);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+  //glEnable ( GL_LIGHTING );
+    // glEnable(GL_LIGHT0);
 
   //Initialize clear color
   glClearColor( 0.f, 0.f, 0.f, 1.f );
@@ -105,7 +104,7 @@ bool init(SDL_Window** window)
     return true;    
 }
 
-void handleKeys( SDL_Keycode key, int x, int y ) 
+void handleKeys( SDL_Keycode key, int x, int y, Maze* maze ) 
 { 
   //Toggle quad 
   if( key == SDLK_q ) 
@@ -115,25 +114,24 @@ void handleKeys( SDL_Keycode key, int x, int y )
   if( key == SDLK_w )
   {
     if (pos[2] == 0)
-      pos[0] -= 4;
+      maze_progress(maze, 2);
     if (pos[2] == 1)
-      pos[1] += 4;
+      maze_progress(maze, 1);
     if (pos[2] == 2)
-      pos[0] += 4;
+      maze_progress(maze, 0);
     if (pos[2] == 3)
-      pos[1] -= 4;
-
+      maze_progress(maze, 3);
   }
   if( key == SDLK_s )
   {
-     if (pos[2] == 0)
-      pos[0] += 4;
+    if (pos[2] == 0)
+      maze_progress(maze, 0);
     if (pos[2] == 1)
-      pos[1] -= 4;
+      maze_progress(maze, 3);
     if (pos[2] == 2)
-      pos[0] -= 4;
+      maze_progress(maze, 2);
     if (pos[2] == 3)
-      pos[1] += 4;
+      maze_progress(maze, 1);
   }
   if( key == SDLK_a )
   {
@@ -143,6 +141,7 @@ void handleKeys( SDL_Keycode key, int x, int y )
   {
     pos[2] = (pos[2] + 1)%4;
   }
+
 }
 
 void render(SDL_Window* w, Maze maze)
@@ -151,12 +150,30 @@ void render(SDL_Window* w, Maze maze)
    glMatrixMode(GL_MODELVIEW); 
    
    glLoadIdentity();
+   GLfloat specular[] = {1, 1, 1, 1.0};
+   GLfloat lightpos[] = {pos[0], 0, pos[1], 1};
    
-   gluLookAt(	pos[1], 50.0f, pos[0] - 10,
-			pos[1] + (pos[2] == 1 ? 1 : 0) + (pos[2] == 3 ? -1 : 0), 
+   gluLookAt(	pos[1], 30, pos[0],
+			pos[1] + (pos[2] == 1 ? 10 : 0) + (pos[2] == 3 ? -10 : 0), 
       0.0, 
-      pos[0] + (pos[2] == 0 ? -1 : 0) + (pos[2] == 2 ? 1 : 0),
+      pos[0] + (pos[2] == 0 ? -10 : 0) + (pos[2] == 2 ? 10 : 0),
 			0.0f, 1.0f,  0.0f);
+
+   GLfloat mat_ambient[] = { 0.25, 0.25, 0.25, 1.0 };
+GLfloat mat_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
+GLfloat mat_specular[] = { 0.774597, 0.774597, 0.774597, 1.0 };
+
+GLfloat mat_shine = 0.6;
+  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
+  //glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
+  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05);
+
+glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient);
+glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse);
+glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular);
+glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
+
 /*
   //Render quad
   for (int i = 0; i < 10; ++i){
@@ -194,7 +211,7 @@ void render(SDL_Window* w, Maze maze)
         glVertex3f(  2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
         glVertex3f(  2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
       }
-      /*if (maze._data[j + i * M_SIZE].wall_west)
+      if (maze._data[j + i * M_SIZE].wall_west)
       {
         // Left face
         glColor3f(   0.0f,  0.0f,  2.0f);  // Blue
@@ -210,11 +227,13 @@ void render(SDL_Window* w, Maze maze)
         glVertex3f( -2.0f, 2.0f,   -2.0f );  // Top-left of top face
         glVertex3f( -2.0f, -2.0f,  -2.0f );  // Bottom-left of top face
         glVertex3f(  2.0f, -2.0f,  -2.0f );  // Bottom-right of top face
-      }*/
+      }
       glEnd();
       glPopMatrix();
     }
 
+  glTranslatef(pos[1],0,pos[0]);
+  mazeSeg();
 
  //Update screen
   SDL_GL_SwapWindow(w);
@@ -246,13 +265,15 @@ int main()
         //Handle keypress with current mouse position 
         int x = 0, y = 0;
         SDL_GetMouseState( &x, &y ); 
-        handleKeys( event.key.keysym.sym , x, y ); 
+        handleKeys( event.key.keysym.sym , x, y, &maze ); 
       } 
     } 
     //Run frame update 
     //update(window); 
     //Render frame 
     //rot += 10;
+    pos[0] = -maze.posy * 4;
+    pos[1] = maze.posx * 4;
     render(window, maze); 
 
     SDL_Delay(100);

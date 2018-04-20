@@ -1,2 +1,2 @@
 all:
-	gcc -lSDL2 test_maze.c maze.c -g -o game
+	gcc graphics.c maze.c -lGL -lSDL2 -lGLU
