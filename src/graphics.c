@@ -51,7 +51,6 @@ bool initGL()
   glDepthFunc(GL_LEQUAL);
   glShadeModel(GL_SMOOTH);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-  glFrustum(0,0,0,0,0,10);
 
   //Initialize clear color
   glClearColor( 0.f, 0.f, 0.f, 1.f );
@@ -153,7 +152,7 @@ void render(SDL_Window* w, Maze maze)
    
    glLoadIdentity();
    
-   gluLookAt(	pos[1], 20.0f, pos[0],
+   gluLookAt(	pos[1], 50.0f, pos[0] - 10,
 			pos[1] + (pos[2] == 1 ? 1 : 0) + (pos[2] == 3 ? -1 : 0), 
       0.0, 
       pos[0] + (pos[2] == 0 ? -1 : 0) + (pos[2] == 2 ? 1 : 0),
