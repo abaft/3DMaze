@@ -1,6 +1,8 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
+#include "maze.h"
+#define M_SIZE 10
 
 #define true 1
 #define false 0
@@ -144,7 +146,7 @@ void handleKeys( SDL_Keycode key, int x, int y )
   }
 }
 
-void render(SDL_Window* w)
+void render(SDL_Window* w, Maze maze)
 {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
    glMatrixMode(GL_MODELVIEW); 
@@ -156,7 +158,7 @@ void render(SDL_Window* w)
       0.0, 
       pos[0] + (pos[2] == 0 ? -1 : 0) + (pos[2] == 2 ? 1 : 0),
 			0.0f, 1.0f,  0.0f);
-
+/*
   //Render quad
   for (int i = 0; i < 10; ++i){
     glPushMatrix();
@@ -164,6 +166,53 @@ void render(SDL_Window* w)
     mazeSeg();
     glPopMatrix();
   }
+
+  */
+
+  
+
+  for (int i = 0; i < M_SIZE; ++i)
+    for (int j = 0; j < M_SIZE; ++j)
+    {
+      glPushMatrix();
+      glTranslatef(j * 4, 0, -i * 4);
+      glBegin( GL_QUADS );
+      if (maze._data[j + i * M_SIZE].wall_north)
+      {
+        glColor3f(   0.0f, 2.0f,   0.0f );  // Green
+        glVertex3f(  2.0f, 2.0f,   2.0f );  // Top-right of top face
+        glVertex3f( -2.0f, 2.0f,   2.0f );  // Top-left of top face
+        glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
+        glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
+      } 
+      if (maze._data[j + i * M_SIZE].wall_east)
+      {
+        glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
+        glVertex3f(  2.0f,  2.0f,  2.0f);  // Top-Right of left face
+        glVertex3f(  2.0f,  2.0f, -2.0f);  // Top-Left of left face
+        glVertex3f(  2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
+        glVertex3f(  2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
+      }
+      if (maze._data[j + i * M_SIZE].wall_west)
+      {
+        // Left face
+        glColor3f(   0.0f,  0.0f,  2.0f);  // Blue
+        glVertex3f( -2.0f,  2.0f,  2.0f);  // Top-Right of left face
+        glVertex3f( -2.0f,  2.0f, -2.0f);  // Top-Left of left face
+        glVertex3f( -2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
+        glVertex3f( -2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
+      }
+      if (maze._data[j + i * M_SIZE].wall_south)
+      {
+        glColor3f(   0.0f, 2.0f,   0.0f );  // Green
+        glVertex3f(  2.0f, 2.0f,   2.0f );  // Top-right of top face
+        glVertex3f( -2.0f, 2.0f,   2.0f );  // Top-left of top face
+        glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
+        glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
+      }
+      glEnd();
+      glPopMatrix();
+    }
 
 
  //Update screen
@@ -179,6 +228,11 @@ int main()
   pos[0] = 0;
   pos[1] = 0;
   pos[2] = 0;
+
+  Maze maze;
+
+  maze_generate(&maze, M_SIZE, M_SIZE);
+
   while(!quit)
   {
     //While there are events to handle 
@@ -198,7 +252,7 @@ int main()
     //update(window); 
     //Render frame 
     //rot += 10;
-    render(window); 
+    render(window, maze); 
 
     SDL_Delay(100);
   }   
