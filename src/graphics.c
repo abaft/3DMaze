@@ -2,7 +2,7 @@
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
 #include "maze.h"
-#define M_SIZE 100
+#define M_SIZE 1000
 
 #define true 1
 #define false 0
@@ -17,28 +17,12 @@ void mazeSeg()
   glBegin( GL_QUADS );
     glColor3f(   1.0f,  0.0f,  0.0f);  // Violet
     // Top face
+    glNormal3f(0.0, 1.0, 0.0);
     glVertex3f(  1.0f, 1.0f, -1.0f );  // Top-right of top face
     glVertex3f( -1.0f, 1.0f, -1.0f );  // Top-left of top face
     glVertex3f( -1.0f, 1.0f,  1.0f );  // Bottom-left of top face
     glVertex3f(  1.0f, 1.0f,  1.0f );  // Bottom-right of top face
 
-    // Bottom face
-    glVertex3f(  1.0f, -1.0f, -1.0f ); // Top-right of bottom face
-    glVertex3f( -1.0f, -1.0f, -1.0f ); // Top-left of bottom face
-    glVertex3f( -1.0f, -1.0f,  1.0f ); // Bottom-left of bottom face
-    glVertex3f(  1.0f, -1.0f,  1.0f ); // Bottom-right of bottom face
-
-   // Left face
-    glVertex3f( -1.0f,  1.0f,  1.0f);  // Top-Right of left face
-    glVertex3f( -1.0f,  1.0f, -1.0f);  // Top-Left of left face
-    glVertex3f( -1.0f, -1.0f, -1.0f);  // Bottom-Left of left face
-    glVertex3f( -1.0f, -1.0f,  1.0f);  // Bottom-Right of left face
-
-    // Right face
-    glVertex3f(  1.0f,  1.0f,  1.0f);  // Top-Right of left face
-    glVertex3f(  1.0f,  1.0f, -1.0f);  // Top-Left of left face
-    glVertex3f(  1.0f, -1.0f, -1.0f);  // Bottom-Left of left face
-    glVertex3f(  1.0f, -1.0f,  1.0f);  // Bottom-Right of left face
 glEnd();
 }
 
@@ -48,8 +32,11 @@ bool initGL()
   glDepthFunc(GL_LEQUAL);
   glShadeModel(GL_SMOOTH);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-  //glEnable ( GL_LIGHTING );
-    // glEnable(GL_LIGHT0);
+  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+  
+  glEnable ( GL_LIGHTING );
+  glEnable(GL_LIGHT0);
 
   //Initialize clear color
   glClearColor( 0.f, 0.f, 0.f, 1.f );
@@ -151,28 +138,30 @@ void render(SDL_Window* w, Maze maze)
    
    glLoadIdentity();
    GLfloat specular[] = {1, 1, 1, 1.0};
-   GLfloat lightpos[] = {pos[0], 0, pos[1], 1};
+   GLfloat lightpos[] = {pos[1], 3.5, pos[0], 1};
    
-   gluLookAt(	pos[1], 30, pos[0],
-			pos[1] + (pos[2] == 1 ? 10 : 0) + (pos[2] == 3 ? -10 : 0), 
+   gluLookAt(	pos[1] + (pos[2] == 1 ? -3 : 0) + (pos[2] == 3 ? 3 : 0), 50, 
+      pos[0] + (pos[2] == 0 ? 3 : 0) + (pos[2] == 2 ? -3 : 0),
+			pos[1], 
       0.0, 
-      pos[0] + (pos[2] == 0 ? -10 : 0) + (pos[2] == 2 ? 10 : 0),
+      pos[0],
 			0.0f, 1.0f,  0.0f);
 
-   GLfloat mat_ambient[] = { 0.25, 0.25, 0.25, 1.0 };
-GLfloat mat_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
-GLfloat mat_specular[] = { 0.774597, 0.774597, 0.774597, 1.0 };
+  GLfloat mat_ambient[] = { 0, 0.25, 0.25, 1.0 };
+  GLfloat mat_diffuse[] = { 1, 0.4, 0.4, 1.0 };
+  GLfloat mat_specular[] = { 0.774597, 0.774597, 0.774597, 1.0 };
 
-GLfloat mat_shine = 0.6;
-  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
-  //glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+  GLfloat mat_shine = 0.6;
+  //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
   glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
   glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05);
+  glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient);
-glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse);
-glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular);
-glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
+  glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient);
+  glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse);
+  glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
 
 /*
   //Render quad
@@ -187,14 +176,15 @@ glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
 
   
 
-  for (int i = 0; i < M_SIZE; ++i)
-    for (int j = 0; j < M_SIZE; ++j)
+  for (int i = ((long int) maze.posy - 10 < 0 ? 0 : maze.posy - 10); i < (maze.posy + 10 > M_SIZE ? M_SIZE : maze.posy + 10); ++i)
+    for (int j = ((long int) maze.posx - 10 < 0 ? 0 : maze.posx - 10); j < (maze.posx + 10 > M_SIZE ? M_SIZE : maze.posx + 10); ++j)
     {
       glPushMatrix();
       glTranslatef(j * 4, 0, -i * 4);
       glBegin( GL_QUADS );
       if (maze._data[j + i * M_SIZE].wall_north)
       {
+        glNormal3f(0.0, 0.0, 1.0);
         glColor3f(   0.0f, 2.0f,   0.0f );  // Green
         glVertex3f(  2.0f, 2.0f,   2.0f );  // Top-right of top face
         glVertex3f( -2.0f, 2.0f,   2.0f );  // Top-left of top face
@@ -202,9 +192,11 @@ glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
         glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
         glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
       } 
-      if (maze._data[j + i * M_SIZE].wall_east)
+      if (maze._data[j + i * M_SIZE].wall_east && j == 0)
       {
+        glNormal3f(-1.0, 0.0, 0.0);
         glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
+        glColor3f(   0.0f, 2.0f,   0.0f );  // Green
         glVertex3f(  2.0f,  2.0f,  2.0f);  // Top-Right of left face
         glVertex3f(  2.0f,  2.0f, -2.0f);  // Top-Left of left face
         glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
@@ -214,17 +206,22 @@ glMaterialf (GL_FRONT, GL_SHININESS, mat_shine * 128);
       if (maze._data[j + i * M_SIZE].wall_west)
       {
         // Left face
-        glColor3f(   0.0f,  0.0f,  2.0f);  // Blue
+        glNormal3f(-1.0, 0.0, 0.0);
+        glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
+        glColor3f(   0.0f, 2.0f,   0.0f );  // Green
         glVertex3f( -2.0f,  2.0f,  2.0f);  // Top-Right of left face
         glVertex3f( -2.0f,  2.0f, -2.0f);  // Top-Left of left face
+        glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
         glVertex3f( -2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
         glVertex3f( -2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
       }
-      if (maze._data[j + i * M_SIZE].wall_south)
+      if (maze._data[j + i * M_SIZE].wall_south && i == 0)
       {
+        glNormal3f(0.0, 0.0, 1.0);
         glColor3f(   0.0f, 2.0f,   0.0f );  // Green
         glVertex3f(  2.0f, 2.0f,   -2.0f );  // Top-right of top face
         glVertex3f( -2.0f, 2.0f,   -2.0f );  // Top-left of top face
+        glColor3f(   2.0f,  0.5f,  0.0f ); // Orange
         glVertex3f( -2.0f, -2.0f,  -2.0f );  // Bottom-left of top face
         glVertex3f(  2.0f, -2.0f,  -2.0f );  // Bottom-right of top face
       }
