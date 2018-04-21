@@ -11,6 +11,7 @@
 bool renderQuad;
 int rot;
 int pos[3];
+bool fps;
 
 void mazeSeg()
 {
@@ -29,8 +30,7 @@ glEnd();
 bool initGL()
 {
   glEnable( GL_DEPTH_TEST );
-  glDepthFunc(GL_LEQUAL);
-  glShadeModel(GL_SMOOTH);
+  glDepthFunc(GL_LEQUAL); glShadeModel(GL_SMOOTH);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -42,10 +42,10 @@ bool initGL()
   glClearColor( 0.f, 0.f, 0.f, 1.f );
   glClearDepth(1.0f);
 
-  GLfloat aspect = 1 ;
+  GLfloat aspect = 1.7777778 ;
 
   // Set the viewport to cover the new window
-  glViewport(0, 0, 1080, 1080);
+  glViewport(0, 0, 1920, 1080);
 
   // Set the aspect ratio of the clipping volume to match the viewport
   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
@@ -76,7 +76,7 @@ bool init(SDL_Window** window)
         "Cubes",                  
         SDL_WINDOWPOS_UNDEFINED,           
         SDL_WINDOWPOS_UNDEFINED,           
-        1080,                               
+        1920,                               
         1080,                               
         SDL_WINDOW_OPENGL
     );
@@ -128,6 +128,10 @@ void handleKeys( SDL_Keycode key, int x, int y, Maze* maze )
   {
     pos[2] = (pos[2] + 1)%4;
   }
+  if( key == SDLK_F5)
+  {
+    fps = !fps;
+  }
 
 }
 
@@ -138,15 +142,23 @@ void render(SDL_Window* w, Maze maze)
    
    glLoadIdentity();
    GLfloat specular[] = {1, 1, 1, 1.0};
-   GLfloat lightpos[] = {pos[1], 3.5, pos[0], 1};
-   
+   GLfloat lightpos[] = {pos[1], 0, pos[0], 1};
+  
+   if (fps)
+   gluLookAt(	pos[1], 0, 
+      pos[0],
+			pos[1] + (pos[2] == 1 ? 3 : 0) + (pos[2] == 3 ? -3 : 0), 
+      0.0, 
+      pos[0] + (pos[2] == 0 ? -3 : 0) + (pos[2] == 2 ? 3 : 0),
+			0.0f, 1.0f,  0.0f);
+   else
    gluLookAt(	pos[1] + (pos[2] == 1 ? -3 : 0) + (pos[2] == 3 ? 3 : 0), 50, 
       pos[0] + (pos[2] == 0 ? 3 : 0) + (pos[2] == 2 ? -3 : 0),
 			pos[1], 
       0.0, 
       pos[0],
 			0.0f, 1.0f,  0.0f);
-
+ 
   GLfloat mat_ambient[] = { 0, 0.25, 0.25, 1.0 };
   GLfloat mat_diffuse[] = { 1, 0.4, 0.4, 1.0 };
   GLfloat mat_specular[] = { 0.774597, 0.774597, 0.774597, 1.0 };
@@ -245,6 +257,7 @@ int main()
   pos[0] = 0;
   pos[1] = 0;
   pos[2] = 0;
+  fps = false;
 
   Maze maze;
 
