@@ -2,7 +2,7 @@
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
 #include "maze.h"
-#define M_SIZE 1000
+#define M_SIZE 15
 
 #define true 1
 #define false 0
@@ -137,23 +137,24 @@ void handleKeys( SDL_Keycode key, int x, int y, Maze* maze )
 
 void render(SDL_Window* w, Maze maze)
 {
+   glClearColor(0.090, 0.9, 1.00, 0.5);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
    glMatrixMode(GL_MODELVIEW); 
    
    glLoadIdentity();
    GLfloat specular[] = {1, 1, 1, 1.0};
-   GLfloat lightpos[] = {pos[1], 0, pos[0], 1};
+   GLfloat lightpos[] = {pos[1], 5, pos[0], 1};
   
    if (fps)
    gluLookAt(	pos[1], 0, 
       pos[0],
-			pos[1] + (pos[2] == 1 ? 3 : 0) + (pos[2] == 3 ? -3 : 0), 
+			pos[1] + (pos[2] == 1 ? 6 : 0) + (pos[2] == 3 ? -6 : 0), 
       0.0, 
-      pos[0] + (pos[2] == 0 ? -3 : 0) + (pos[2] == 2 ? 3 : 0),
+      pos[0] + (pos[2] == 0 ? -6 : 0) + (pos[2] == 2 ? 6 : 0),
 			0.0f, 1.0f,  0.0f);
    else
-   gluLookAt(	pos[1] + (pos[2] == 1 ? -3 : 0) + (pos[2] == 3 ? 3 : 0), 50, 
-      pos[0] + (pos[2] == 0 ? 3 : 0) + (pos[2] == 2 ? -3 : 0),
+   gluLookAt(	pos[1] + (pos[2] == 1 ? -20 : 0) + (pos[2] == 3 ? 20 : 0), 40, 
+      pos[0] + (pos[2] == 0 ? 20 : 0) + (pos[2] == 2 ? -20 : 0),
 			pos[1], 
       0.0, 
       pos[0],
@@ -188,8 +189,8 @@ void render(SDL_Window* w, Maze maze)
 
   
 
-  for (int i = ((long int) maze.posy - 10 < 0 ? 0 : maze.posy - 10); i < (maze.posy + 10 > M_SIZE ? M_SIZE : maze.posy + 10); ++i)
-    for (int j = ((long int) maze.posx - 10 < 0 ? 0 : maze.posx - 10); j < (maze.posx + 10 > M_SIZE ? M_SIZE : maze.posx + 10); ++j)
+  for (int i = ((long int) maze.posy - 15 < 0 ? 0 : maze.posy - 15); i < (maze.posy + 15 > M_SIZE ? M_SIZE : maze.posy + 15); ++i)
+    for (int j = ((long int) maze.posx - 15 < 0 ? 0 : maze.posx - 15); j < (maze.posx + 15 > M_SIZE ? M_SIZE : maze.posx + 15); ++j)
     {
       glPushMatrix();
       glTranslatef(j * 4, 0, -i * 4);
@@ -204,7 +205,7 @@ void render(SDL_Window* w, Maze maze)
         glVertex3f( -2.0f, -2.0f,  2.0f );  // Bottom-left of top face
         glVertex3f(  2.0f, -2.0f,  2.0f );  // Bottom-right of top face
       } 
-      if (maze._data[j + i * M_SIZE].wall_east && j == 0)
+      if (maze._data[j + i * M_SIZE].wall_east /*&& i == 0*/)
       {
         glNormal3f(-1.0, 0.0, 0.0);
         glColor3f(   2.0f,  0.0f,  2.0f);  // Violet
@@ -227,7 +228,7 @@ void render(SDL_Window* w, Maze maze)
         glVertex3f( -2.0f, -2.0f, -2.0f);  // Bottom-Left of left face
         glVertex3f( -2.0f, -2.0f,  2.0f);  // Bottom-Right of left face
       }
-      if (maze._data[j + i * M_SIZE].wall_south && i == 0)
+      if (maze._data[j + i * M_SIZE].wall_south /*&& j == 0*/)
       {
         glNormal3f(0.0, 0.0, 1.0);
         glColor3f(   0.0f, 2.0f,   0.0f );  // Green
