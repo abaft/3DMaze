@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([3DMaze], [0.5], [sc17b3c@leeds.ac.uk])
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([src/test_maze.c])
+AC_CONFIG_SRCDIR([src])
 #AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
