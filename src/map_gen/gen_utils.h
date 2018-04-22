@@ -17,6 +17,8 @@ typedef struct _Cell
   char wall_south : 1;
   char wall_west : 1;
 
+  char active : 1;
+
   struct _Cell* _build_previous;
 }Cell;
 
@@ -49,7 +51,9 @@ typedef struct
 }Maze;
 
 void maze_free(Maze* maze);
-void maze_generate(Maze* maze, unsigned int width, unsigned int height);
-char maze_progress(Maze* maze, int direction);
+void maze_init(Maze* maze, unsigned int width, unsigned int height);
+void maze_generate_empty(Maze* maze);
+void maze_generate_rbt(Maze* maze);
+char maze_progress(Maze* maze, char direction);
 
 #endif

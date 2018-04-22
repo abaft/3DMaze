@@ -1,7 +1,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
-#include "maze.h"
+#include "map_gen/gen_utils.h"
 #define M_SIZE 15
 
 #define true 1
@@ -262,9 +262,10 @@ int main()
 
   Maze maze;
 
-  maze_generate(&maze, M_SIZE, M_SIZE);
+  maze_init(&maze, M_SIZE, M_SIZE);
+  maze_generate_empty(&maze);
 
-  while(!quit)
+  while(1)
   {
     //While there are events to handle 
     while( SDL_PollEvent( &event ) ) 
