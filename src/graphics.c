@@ -253,7 +253,7 @@ int main()
 {
   SDL_Window* window;
   init(&window);
-  bool quit;
+  bool quit = 0;
   SDL_Event event;
   pos[0] = 0;
   pos[1] = 0;
@@ -263,9 +263,9 @@ int main()
   Maze maze;
 
   maze_init(&maze, M_SIZE, M_SIZE);
-  maze_generate_empty(&maze);
+  maze_generate_rbt(&maze);
 
-  while(1)
+  while(!quit)
   {
     //While there are events to handle 
     while( SDL_PollEvent( &event ) ) 
