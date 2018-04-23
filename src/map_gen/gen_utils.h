@@ -56,5 +56,6 @@ void maze_generate_empty(Maze* maze);
 void maze_generate_rbt(Maze* maze);
 char maze_progress(Maze* maze, char direction);
 struct _Cell* cell_by_pos(Maze* maze, int x, int y);
+void maze_generate_dun(Maze* maze);
 
 #endif

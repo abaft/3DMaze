@@ -6,4 +6,5 @@ AUTOMAKE_OPTIONS = subdir-objects
 # this lists the binaries to produce, the (non-PHONY, binary) targets in
 # the previous manual Makefile
 bin_PROGRAMS = 3DMaze
-3DMaze_SOURCES = graphics.c map_gen/gen_utils.c map_gen/gen_utils.h map_gen/rbt.c
+3DMaze_SOURCES = graphics.c map_gen/gen_utils.c map_gen/gen_utils.h map_gen/rbt.c\
+map_gen/dun.c

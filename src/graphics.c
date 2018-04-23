@@ -2,7 +2,7 @@
 #include "SDL2/SDL_opengl.h"
 #include <GL/glu.h>
 #include "map_gen/gen_utils.h"
-#define M_SIZE 15
+#define M_SIZE 150
 
 #define true 1
 #define false 0
@@ -263,7 +263,7 @@ int main()
   Maze maze;
 
   maze_init(&maze, M_SIZE, M_SIZE);
-  maze_generate_rbt(&maze);
+  maze_generate_dun(&maze);
 
   while(!quit)
   {
