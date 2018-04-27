@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#define ROOM_DENCITY 0.5
+#define ROOM_DENCITY 0.9
 #define MAX_ROOM_DIM 6
 
 struct room
