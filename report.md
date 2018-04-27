@@ -1,6 +1,25 @@
 # Plan
 
-## Summary
+## Summary 
+
+Since Herodotus' account of the Egyptian Labyrinth in the 5th century BC mazes have been a recurring aesthetic theme in both architecture and design.
+But I believe mazes to be so much more than aesthetic, they so neatly encapsulate the human spirit for adventure, providing a microcosm in which to explore the manor in which we move through, and interact with, space.
+I wanted to investigate how this translates into cyber-space, that is the intersection between a physical maze and the virtual.
+If the physical maze is a microcosm for our material experience, then this most basic and historic structure in cyber-space could surely be a reflection our computing experience.
+
+In the seemingly endless turmoil of modernity and it's vast and oddly inconsequential complexity we seek, possibly in vein, to find meaning, purpose and truth.
+These very human traits don't necessarily translate into the binary, the indifferent nature of the machine, but regardless we are compelled to strive for the machine to grant us meaning, purpose and truth.
+
+A higher understanding of our position in relation to this, our daunting new world, is greatly important in the quest for meaning.
+To this end I have created a maze, In it's apparent simplicity it provides a complex allegory for our modern transcendent existence.
+It is left to the user to fine meaning and purpose in the maze's desolate and isolating environment, to reflect on the existential immaterial nature of our virtual lives.
+
+The trapped perspective and construction of the maze is a design to enable the user to experience the trapping confines of our highly interconnected presence.
+It's meaninglessness, a ploy to empower the user into realising their subconscious entrenchment in this brave new world of youtube and facebook.
+
+In summary, I hope to inspire self reflection and introspection as the user navigates my world, created at random, and try to understand their dependence on the machine.
+
+---------------------
 
 I chose to do the SDL task in order to learn more about the OpenGL.
 Within this I decided to go for a more interactive artistic project than actual game.
@@ -80,11 +99,11 @@ All of my tests were fairly successful and came back without too many errors or 
 Any bugs found were corrected.
 For visual demonstration of what the tests looked like please compile and view the render and interact with it using WASD and F5 to change perspective.
 
-Here is a breakdown of the funcionality needing testing:
+Here is a breakdown of the functionality needing testing:
 
 ## pressing W:
 
-When w is pressed the render does appear to, if the player position isn't against a wall in the forward direction, progress forward.
+When W is pressed the render does appear to, if the player position isn't against a wall in the forward direction, progress forward.
 
 ## pressing A:
 
@@ -92,11 +111,24 @@ When A is pressed the camera does appear to move to the players left. This indic
 
 ## pressing S:
 
-When w is pressed the render does appear to, if the player position isn't backing a wall, progress backward.
+When S is pressed the render does appear to, if the player position isn't backing a wall, progress backward.
 
 ## pressing D:
 
-When A is pressed the camera does appear to move to the players left. This indicates that the `pos[2]` rotational position is working and properly translating to the change in camera.
+When D is pressed the camera does appear to move to the players left. This indicates that the `pos[2]` rotational position is working and properly translating to the change in camera.
+
+## pressing F5:
+
+Upon the pressing of F5 the perspective will change, it will switch between a top down perspective and a first person perspective.
+This, when tested, also worked perfectly and successfully.
+
+## The render
+
+The maze successfully renders and displays the requisite walls and spaces to lead me to believe that the software works in full.
+The SDL window is successfully created and the SDL keystroke events are clearly recognised.
+
+Little went wrong during the making of this project and the development went smoothly and quickly and other than one or two cases in which one could walk through walls it all went quite well.
+I utilised git to allow me to experiment with my code safe in the knowledge that I can roll back my commits to a working version.
 
 # Reflection
 
@@ -104,4 +136,10 @@ To reflect on my project, I feel it went well.
 I learned a significant amount about liner algebra, matrices and Xorg (arguably all three necessary as openGL and SDL manages a significant amount of this for me).
 Before I discovered the gluLookAt function creating the view port matrix was rather tricky as I was unfamiliar with this area in mathematics).
 
+I will admit, time management was a little bit of a problem.
+None of the set tasks really engaged me particularly, with their annoying (and I would argue unnecessary) limitations, and thus finding the motivation to get the job done was rather hard.
 
+I really love C programming because, unlike the child friendly languages of today such as Java and python, I feel far more as if I am programming a computer rather than programming another program.
+It's closeness to the physical machine and lack of unnecessary verbosity really lends to an experience similar to writing assembly without the ridiculous amount of time it takes to do menial tasks.
+The unsafeness of C I think is seen by my colleges as an annoyance, but to me I see it as a great asset.
+The gloves are off and I am able to manage memory in the way I want to manage memory and not have some garbage garbage collector parasite running along side my program.
